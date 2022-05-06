@@ -3,7 +3,6 @@ import React from "react";
 import { COLORS, FONTS } from "../constants";
 
 const TabIcon = ({ focused, icon, label, isTrade, iconStyle }) => {
-  console.log(label);
   if (isTrade) {
     return (
       <View

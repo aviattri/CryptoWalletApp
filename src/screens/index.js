@@ -3,5 +3,5 @@ import Market from "./Market";
 import Portfolio from "./Portfolio";
 import Profile from "./Profile";
 import Trade from "./Trade";
-
-export { Home, Market, Portfolio, Profile, Trade };
+import MainLayout from "./MainLayout";
+export { Home, Market, Portfolio, Profile, Trade, MainLayout };
