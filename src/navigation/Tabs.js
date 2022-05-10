@@ -51,6 +51,7 @@ const Tabs = ({ setTradeModalVisibility, isTradeModalVisible }) => {
               );
             }
           },
+          headerShown: false,
         }}
         listeners={{
           tabPress: (e) => {
@@ -106,6 +107,7 @@ const Tabs = ({ setTradeModalVisibility, isTradeModalVisible }) => {
               />
             );
           },
+          headerShown: false,
         }}
       />
       <Tab.Screen
