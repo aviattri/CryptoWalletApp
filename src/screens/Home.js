@@ -2,15 +2,16 @@ import { View, Text } from "react-native";
 import React from "react";
 import MainLayout from "./MainLayout";
 import { connect } from "react-redux";
-import { getHoldings } from "../store/market/marketActions";
+import { getCoinMarket, getHoldings } from "../store/market/marketActions";
 import { useFocusEffect } from "@react-navigation/native";
 import { COLORS, dummyData, icons, SIZES } from "../../constants";
-import { BalanceInfo, IconTextButton } from "../../components";
+import { BalanceInfo, Chart, IconTextButton } from "../../components";
 
-const Home = ({ getHoldings, myHoldings }) => {
+const Home = ({ getHoldings, myHoldings, getCoinMarket, coins }) => {
   useFocusEffect(
     React.useCallback(() => {
       getHoldings(dummyData.holdings);
+      getCoinMarket();
     }, [])
   );
 
@@ -68,6 +69,11 @@ const Home = ({ getHoldings, myHoldings }) => {
       <View style={{ flex: 1, backgroundColor: COLORS.black }}>
         {/* wallet info section */}
         {renderWalletInfoSection()}
+        {/* Charts */}
+        <Chart
+          containerStyle={{ marginTop: SIZES.padding * 2 }}
+          chartPrices={10.2}
+        />
       </View>
     </MainLayout>
   );
@@ -76,6 +82,7 @@ const Home = ({ getHoldings, myHoldings }) => {
 function mapStateToProps(state) {
   return {
     myHoldings: state.marketReducer.myHoldings,
+    coins: state.marketReducer.coins,
   };
 }
 
@@ -98,6 +105,25 @@ function mapDispatchToProps(dispatch) {
           coinList,
           orderBy,
           sparkLine,
+          priceChangePerc,
+          perPage,
+          page
+        )
+      );
+    },
+    getCoinMarket: (
+      currency,
+      orderBy,
+      sparkline,
+      priceChangePerc,
+      perPage,
+      page
+    ) => {
+      return dispatch(
+        getCoinMarket(
+          currency,
+          orderBy,
+          sparkline,
           priceChangePerc,
           perPage,
           page

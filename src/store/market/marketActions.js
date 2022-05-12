@@ -1,5 +1,4 @@
 import axios from "axios";
-import { dummyData } from "../../../constants";
 
 export const GET_HOLDINGS_BEGIN = "GET_HOLDINGS_BEGIN";
 export const GET_HOLDINGS_SUCCESS = "GET_HOLDINGS_SUCCESS";
@@ -8,6 +7,7 @@ export const GET_COIN_MARKET_BEGIN = "GET_COIN_MARKET_BEGIN";
 export const GET_COIN_MARKET_SUCCESS = "GET_COIN_MARKET_SUCCESS";
 export const GET_COIN_MARKET_FAILURE = "GET_COIN_MARKET_FAILURE";
 
+//my holdings
 export const getHoldingsBegin = () => ({
   type: GET_HOLDINGS_BEGIN,
 });
@@ -22,6 +22,21 @@ export const getHoldingsFailure = (err) => ({
   payload: { err },
 });
 
+//coin market
+export const getCoinMarketBegin = () => ({
+  type: GET_COIN_MARKET_BEGIN,
+});
+
+export const getCoinMarketSuccess = (coins) => ({
+  type: GET_COIN_MARKET_SUCCESS,
+  payload: { coins },
+});
+
+export const getCoinMarketFailure = (err) => ({
+  type: GET_COIN_MARKET_FAILURE,
+  payload: { err },
+});
+
 export function getHoldings(
   holdings = [],
   currency = "usd",
@@ -31,7 +46,6 @@ export function getHoldings(
   perPage = 10,
   page = 1
 ) {
-  console.log(holdings);
   return (dispatch) => {
     dispatch(getHoldingsBegin());
     let ids = holdings
@@ -87,6 +101,37 @@ export function getHoldings(
       })
       .catch((err) => {
         dispatch(getHoldingsFailure(err));
+      });
+  };
+}
+
+export function getCoinMarket(
+  currency = "usd",
+  orderBy = "market_cap_desc",
+  sparkline = true,
+  priceChangePerc = "7d",
+  perPage = 10,
+  page = 1
+) {
+  return (dispatch) => {
+    dispatch(getCoinMarketBegin());
+    let apiUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=${orderBy}&per_page=${perPage}&page=${page}&sparkline=${sparkline}&price_change_percentage=${priceChangePerc}`;
+    return axios({
+      url: apiUrl,
+      method: "GET",
+      headers: {
+        Accpet: "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.status == 200) {
+          dispatch(getCoinMarketSuccess(response.data));
+        } else {
+          dispatch(getCoinMarketFailure(response.data));
+        }
+      })
+      .catch((error) => {
+        dispatch(getCoinMarketFailure(error));
       });
   };
 }
