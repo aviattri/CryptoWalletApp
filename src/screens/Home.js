@@ -70,10 +70,7 @@ const Home = ({ getHoldings, myHoldings, getCoinMarket, coins }) => {
         {/* wallet info section */}
         {renderWalletInfoSection()}
         {/* Charts */}
-        <Chart
-          containerStyle={{ marginTop: SIZES.padding * 2 }}
-          chartPrices={10.2}
-        />
+        <Chart chartPrices={coins[0]?.sparkline_in_7d?.price} />
       </View>
     </MainLayout>
   );
