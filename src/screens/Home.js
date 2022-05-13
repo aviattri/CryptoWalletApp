@@ -1,13 +1,16 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import MainLayout from "./MainLayout";
 import { connect } from "react-redux";
 import { getCoinMarket, getHoldings } from "../store/market/marketActions";
 import { useFocusEffect } from "@react-navigation/native";
-import { COLORS, dummyData, icons, SIZES } from "../../constants";
+import { COLORS, dummyData, FONTS, icons, SIZES } from "../../constants";
 import { BalanceInfo, Chart, IconTextButton } from "../../components";
+import { FlatList } from "react-native-gesture-handler";
 
 const Home = ({ getHoldings, myHoldings, getCoinMarket, coins }) => {
+  const [selectedCoin, setSelectedCoin] = React.useState(null);
+
   useFocusEffect(
     React.useCallback(() => {
       getHoldings(dummyData.holdings);
@@ -70,7 +73,109 @@ const Home = ({ getHoldings, myHoldings, getCoinMarket, coins }) => {
         {/* wallet info section */}
         {renderWalletInfoSection()}
         {/* Charts */}
-        <Chart chartPrices={coins[0]?.sparkline_in_7d?.price} />
+        <Chart
+          containerStyle={{ martinTop: SIZES.padding * 2 }}
+          chartPrices={
+            selectedCoin
+              ? selectedCoin?.sparkline_in_7d?.price
+              : coins[0]?.sparkline_in_7d?.price
+          }
+        />
+        {/* Top CryptoCurrency */}
+        <FlatList
+          data={coins}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{
+            marginTop: 30,
+            paddingHorizontal: SIZES.padding,
+          }}
+          ListHeaderComponent={
+            <View style={{ marginBottom: SIZES.radius }}>
+              <Text style={{ color: COLORS.white, ...FONTS.h3, fontSize: 18 }}>
+                Top CryptoCurrency
+              </Text>
+            </View>
+          }
+          ListFooterComponent={
+            <View style={{ marginTop: SIZES.padding * 2 }} />
+          }
+          renderItem={({ item }) => {
+            let priceColor =
+              item.price_price_percentage_7d_in_currency == 0
+                ? COLORS.lightGray3
+                : item.price_price_percentage_7d_in_currency > 0
+                ? COLORS.lightGreen
+                : COLORS.red;
+
+            return (
+              <TouchableOpacity
+                style={{
+                  height: 55,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onPress={() => setSelectedCoin(item)}
+              >
+                {/* Logo */}
+                <View style={{ width: 35 }}>
+                  <Image
+                    source={{ uri: item.image }}
+                    style={{ height: 30, width: 20 }}
+                  />
+                </View>
+                {/* name */}
+                <View style={{ flex: 1 }}>
+                  <Text style={{ color: COLORS.white, ...FONTS.h3 }}>
+                    {item.name}
+                  </Text>
+                </View>
+                {/* Figures */}
+                <View>
+                  <Text
+                    style={{
+                      textAlign: "right",
+                      color: COLORS.white,
+                      ...FONTS.body3,
+                    }}
+                  >{`$${item.current_price}`}</Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    {item.price_change_percentage_7d_in_currency != 0 && (
+                      <Image
+                        source={icons.upArrow}
+                        style={{
+                          height: 10,
+                          width: 10,
+                          tintColor: priceColor,
+                          transform:
+                            item.price_change_percentage_7d_in_currency > 0
+                              ? [{ rotate: "45deg" }]
+                              : [{ rotate: "125deg" }],
+                        }}
+                      />
+                    )}
+                    <Text
+                      style={{
+                        marginLeft: 5,
+                        lineHeight: 15,
+                        color: priceColor,
+                        ...FONTS.body5,
+                      }}
+                    >
+                      {item.price_change_percentage_7d_in_currency.toFixed(2)}%
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+        />
       </View>
     </MainLayout>
   );
