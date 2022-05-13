@@ -101,9 +101,9 @@ const Home = ({ getHoldings, myHoldings, getCoinMarket, coins }) => {
           }
           renderItem={({ item }) => {
             let priceColor =
-              item.price_price_percentage_7d_in_currency == 0
+              item.price_change_percentage_7d_in_currency == 0
                 ? COLORS.lightGray3
-                : item.price_price_percentage_7d_in_currency > 0
+                : item.price_change_percentage_7d_in_currency > 0
                 ? COLORS.lightGreen
                 : COLORS.red;
 
