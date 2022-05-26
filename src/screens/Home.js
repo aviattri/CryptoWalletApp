@@ -73,7 +73,8 @@ const Home = ({ getHoldings, myHoldings, getCoinMarket, coins }) => {
         {/* wallet info section */}
         {renderWalletInfoSection()}
         {/* Charts */}
-        <Chart
+        {
+          coins && coins.length > 0&&  <Chart
           containerStyle={{ martinTop: SIZES.padding * 2 }}
           chartPrices={
             selectedCoin
@@ -81,6 +82,8 @@ const Home = ({ getHoldings, myHoldings, getCoinMarket, coins }) => {
               : coins[0]?.sparkline_in_7d?.price
           }
         />
+        }
+       
         {/* Top CryptoCurrency */}
         <FlatList
           data={coins}

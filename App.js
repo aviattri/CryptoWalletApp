@@ -14,7 +14,7 @@ const Stack = createStackNavigator();
 const store = createStore(rootReducer, applyMiddleware(thunk));
 const App = () => {
   const [loaded] = useFonts({
-    "Roboto-Black.": require("./assets/fonts/Roboto-Black.ttf"),
+    "Roboto-Black": require("./assets/fonts/Roboto-Black.ttf"),
     "Roboto-BlackItalic": require("./assets/fonts/Roboto-BlackItalic.ttf"),
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
     "Roboto-BoldItalic": require("./assets/fonts/Roboto-BoldItalic.ttf"),
