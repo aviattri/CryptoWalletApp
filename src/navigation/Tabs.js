@@ -75,8 +75,8 @@ const Tabs = ({ setTradeModalVisibility, isTradeModalVisible }) => {
                 />
               );
             }
-          },          headerShown: false,
-
+          },
+          headerShown: false,
         }}
         listeners={{
           tabPress: (e) => {
@@ -126,6 +126,7 @@ const Tabs = ({ setTradeModalVisibility, isTradeModalVisible }) => {
               );
             }
           },
+          headerShown: false,
         }}
         listeners={{
           tabPress: (e) => {
