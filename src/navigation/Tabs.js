@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import { setTradeModalVisibility } from "../store/tabs/tabActions";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { COLORS, icons } from "../../constants";
+import { COLORS, icons, SIZES } from "../../constants";
 import { Home, Profile, Portfolio, Market, Trade } from "../screens";
 import { TabIcon } from "../../components";
 
@@ -94,8 +94,15 @@ const Tabs = ({ setTradeModalVisibility, isTradeModalVisible }) => {
             return (
               <TabIcon
                 focused={focused}
-                icon={icons.trade}
+                icon={!isTradeModalVisible ? icons.trade : icons.close}
                 label={"Trade"}
+                iconStyle={
+                  isTradeModalVisible && {
+                    height: 15,
+                    width: 15,
+                    marginBottom: SIZES.base,
+                  }
+                }
                 isTrade={true}
               />
             );
@@ -152,6 +159,7 @@ const Tabs = ({ setTradeModalVisibility, isTradeModalVisible }) => {
               );
             }
           },
+          headerShown: false,
         }}
         listeners={{
           tabPress: (e) => {
